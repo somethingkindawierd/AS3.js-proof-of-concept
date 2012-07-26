@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>as3.js Unit Tests - flash.geom.Matrix</title>
+  <script type="text/javascript" src="../../../closure-library/closure/goog/base.js"></script>
+  <script src="../../as3.deps.js"></script>
+  <script>
+    goog.require('beebe');
+    goog.require('goog.testing.jsunit');
+  </script>
+</head>
+<body>
+<pre>
+<script>
+
+// Various function patterns we want to test.
+var funcs = {
+  noArgs: [
+    function() {},
+    function () {},
+    function () { if(a == b) { } }
+  ],
+  oneArg: [
+    function(a) {},
+    function (a) { /* stuff */ },
+    function (a) { if(a) {} }
+  ],
+  multipleArgs: [
+    function(a,b) {},
+    function (a, b) { /* stuff */ },
+    function (a, b) { if ( a == b) {} }
+  ]
+};
+
+// Define all our test functions for each function pattern defined above.
+(function() {
+
+  goog.array.forEach(funcs.noArgs, function(func, index) {
+    window['testTakesNoArgs_' + index] = function() {
+      assertTrue(beebe.func.takesNoArgs(func));
+      assertFalse(beebe.func.takesArgs(func));
+      assertFalse(beebe.func.takesMultipleArgs(func));
+    }
+  });
+
+  goog.array.forEach(funcs.oneArg, function(func, index) {
+    window['testTakesOneArg_' + index] = function() {
+      assertTrue(beebe.func.takesArgs(func));
+      assertFalse(beebe.func.takesNoArgs(func));
+      assertFalse(beebe.func.takesMultipleArgs(func));
+    }
+  });
+
+  goog.array.forEach(funcs.multipleArgs, function(func, index) {
+    window['testTakesMultipseArgs_' + index] = function() {
+      assertTrue(beebe.func.takesArgs(func));
+      assertFalse(beebe.func.takesNoArgs(func));
+      assertTrue(beebe.func.takesMultipleArgs(func));
+    }
+  });
+
+})();
+
+</script>
+</pre>
+</body>
+</html>
+

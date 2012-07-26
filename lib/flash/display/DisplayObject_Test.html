@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang=en>
+  <head>
+    <meta charset=utf-8>
+    <title>Display Object Tests</title>
+
+    <script src="../../../../closure-library/closure/goog/base.js"></script>
+    <script src="../../../as3.deps.js"></script>
+    <script>
+      goog.require('flash.display.Shape');
+      goog.require('flash.display.Sprite');
+      goog.require('goog.testing.jsunit');
+    </script>
+  </head>
+  <body>
+  <pre>
+    <script>
+  
+      function testUniqueDisplayLists() {
+        
+        var sprite = new Sprite();
+        assertEquals( 'Expect emply display list', sprite.numChildren, 0 );
+
+        var sprite2 = new Sprite();
+        assertEquals( 'Expect emply display list', sprite2.numChildren, 0 );
+
+        assertNotEquals( 'Expect display lists will *not* equal eachother',
+            sprite.displayList_, sprite2.displayList_);
+  
+      }
+
+      function testAddingDisplayObjects() {
+
+        var sprite = new Sprite(),
+            shape1 = new Shape(),
+            shape2 = new Shape(),
+            shape3 = new Shape();
+        
+        shape1.x = 50;
+        shape1.y = 90;
+        shape1.width = 160;
+        shape1.height = 100;
+        shape1.alpha = 0.5;
+        shape1.name = 'Monkey';
+
+        shape2.x = 100;
+        shape2.y = 100;
+
+        // Add shapes to display list
+        sprite.addChild(shape1);
+        sprite.addChild(shape2);
+        sprite.addChild(shape3);
+
+        // Let's make sure everything's ok in that display list.
+        assertEquals(sprite.numChildren, 3);
+        assertEquals(sprite.getChildAt(0), shape1);
+        assertEquals(sprite.getChildAt(1), shape2);
+        assertEquals(sprite.getChildAt(2), shape3);
+
+      }
+
+      function testContains() {
+
+        var sprite = new Sprite(),
+            shapeA = new Shape(),
+            shapeB = new Shape();
+
+        sprite.addChild(shapeA);
+
+        assertTrue(sprite.contains(shapeA));
+        assertFalse(sprite.contains(shapeB));
+
+      }
+
+
+      function testGetChildAt() {
+
+        var sprite = new Sprite(),
+            shapeA = new Shape(),
+            shapeB = new Shape(),
+            shapeC = new Shape();
+
+        sprite.addChild(shapeA);
+        sprite.addChild(shapeB);
+        sprite.addChild(shapeC);
+
+        assertEquals(sprite.getChildAt(0), shapeA);
+        assertEquals(sprite.getChildAt(1), shapeB);
+        assertEquals(sprite.getChildAt(2), shapeC);
+
+        try {
+          sprite.getChildAt(4);
+        }
+        catch(e) {
+          assertTrue(e instanceof RangeError);
+        }
+
+      }
+
+
+      function testAddingDisplayObjectAtIndex() {
+
+        var sprite = new Sprite(),
+            shapeA = new Shape(),
+            shapeB = new Shape(),
+            shapeC = new Shape();
+
+        shapeA.name = 'A';
+        shapeB.name = 'B';
+        shapeC.name = 'C';
+
+        sprite.name = 'Test Sprite';
+
+        sprite.addChild(shapeB);
+        sprite.addChildAt(shapeC, 1);
+        sprite.addChildAt(shapeA, 0);
+
+        // Expect display list to be 
+        // [shapeA, shapeB, shapeC]
+
+        assertEquals(sprite.getChildAt(0), shapeA);
+        assertEquals(sprite.getChildAt(1), shapeB);
+        assertEquals(sprite.getChildAt(2), shapeC);
+
+        try{
+          sprite.addChildAt(shapeA, -5);
+        }
+        catch(e) {
+          assertTrue(e instanceof RangeError);
+        }
+
+        try {
+          sprite.addChildAt(sprite, 5);
+        }
+        catch(e) {
+          assertTrue(e instanceof flash.errors.ArgumentError);
+        }
+      }
+
+      function testGetChildIndex() {
+
+        var sprite = new Sprite(),
+            shapeA = new Shape(),
+            shapeB = new Shape(),
+            shapeC = new Shape();
+
+        shapeA.name = 'A';
+        shapeB.name = 'B';
+
+        sprite.addChild(shapeA);
+        sprite.addChild(shapeB);
+
+        assertEquals(sprite.getChildIndex(shapeA), 0);
+        assertEquals(sprite.getChildIndex(shapeB), 1);
+
+        try {
+          sprite.getChildIndex(new Shape());
+        }
+        catch(e) {
+          assertTrue(e instanceof flash.errors.ArgumentError);
+        }
+      }
+
+
+      function testRemoveChild() {
+
+        var sprite = new Sprite(),
+            shapeA = new Shape(),
+            shapeB = new Shape();
+
+        shapeA.name = 'A';
+        shapeB.name = 'B';
+
+        sprite.addChild(shapeA);
+        sprite.addChild(shapeB);
+
+        assertEquals(2, sprite.displayList_.length);
+        assertEquals(shapeA, sprite.removeChild(shapeA));
+        assertEquals(1, sprite.displayList_.length);
+        assertEquals(shapeB, sprite.removeChild(shapeB));
+        assertEquals(0, sprite.displayList_.length);
+
+        try {
+          sprite.removeChild(new Shape());
+        }
+        catch(e) {
+          assertTrue(e instanceof flash.errors.ArgumentError);
+        }
+      }
+
+
+      function testRemoveChildAt() {
+
+        var sprite = new Sprite(),
+            shapeA = new Shape(),
+            shapeB = new Shape();
+
+        shapeA.name = 'A';
+        shapeB.name = 'B';
+
+        sprite.addChild(shapeA);
+        sprite.addChild(shapeB);
+
+        assertEquals(2, sprite.displayList_.length);
+        assertEquals(shapeB, sprite.removeChildAt(1));
+        assertEquals(1, sprite.displayList_.length);
+        assertEquals(shapeA, sprite.removeChildAt(0));
+        assertEquals(0, sprite.displayList_.length);
+
+        try {
+          sprite.removeChildAt(3);
+        }
+        catch(e) {
+          assertTrue(e instanceof flash.errors.RangeError);
+        }
+      }
+
+      function testSetChildIndex() {
+
+        var sprite = new Sprite(),
+            shapeA = new Shape(),
+            shapeB = new Shape(),
+            shapeC = new Shape();
+
+        shapeA.name = 'A';
+        shapeB.name = 'B';
+        shapeC.name = 'C';
+
+        sprite.name = 'Test Sprite';
+
+        sprite.addChild(shapeB);
+        sprite.addChildAt(shapeC, 1);
+        sprite.addChildAt(shapeA, 0);
+
+        // Expect display list to be 
+        // [shapeA, shapeB, shapeC]
+
+        assertEquals(sprite.getChildAt(0), shapeA);
+        assertEquals(sprite.getChildAt(1), shapeB);
+        assertEquals(sprite.getChildAt(2), shapeC);
+
+        sprite.setChildIndex(shapeC, 0);
+        
+        // Expect display list to be 
+        // [shapeC, shapeA, shapeB]
+
+        assertEquals(sprite.getChildAt(0), shapeC);
+        assertEquals(sprite.getChildAt(1), shapeA);
+        assertEquals(sprite.getChildAt(2), shapeB);
+      }
+
+      function testSwapChildren() {
+
+        var sprite = new Sprite(),
+            shapeA = new Shape(),
+            shapeB = new Shape(),
+            shapeC = new Shape();
+
+        shapeA.name = 'A';
+        shapeB.name = 'B';
+        shapeC.name = 'C';
+
+        sprite.name = 'Test Sprite';
+
+        sprite.addChild(shapeA);
+        sprite.addChild(shapeB);
+        sprite.addChild(shapeC);
+
+        // Expect display list to be 
+        // [shapeA, shapeB, shapeC]
+
+        assertEquals(sprite.getChildAt(0), shapeA);
+        assertEquals(sprite.getChildAt(1), shapeB);
+        assertEquals(sprite.getChildAt(2), shapeC);
+
+        sprite.swapChildren(shapeA, shapeC);
+        
+        // Expect display list to be 
+        // [shapeC, shapeB, shapeA]
+
+        assertEquals(sprite.getChildAt(0), shapeC);
+        assertEquals(sprite.getChildAt(1), shapeB);
+        assertEquals(sprite.getChildAt(2), shapeA);
+      }
+
+      function testSwapChildrenAt() {
+
+        var sprite = new Sprite(),
+            shapeA = new Shape(),
+            shapeB = new Shape(),
+            shapeC = new Shape();
+
+        shapeA.name = 'A';
+        shapeB.name = 'B';
+        shapeC.name = 'C';
+
+        sprite.name = 'Test Sprite';
+
+        sprite.addChild(shapeA);
+        sprite.addChild(shapeB);
+        sprite.addChild(shapeC);
+
+        // Expect display list to be 
+        // [shapeA, shapeB, shapeC]
+
+        assertEquals(sprite.getChildAt(0), shapeA);
+        assertEquals(sprite.getChildAt(1), shapeB);
+        assertEquals(sprite.getChildAt(2), shapeC);
+
+        sprite.swapChildrenAt(0, 2);
+        
+        // Expect display list to be 
+        // [shapeC, shapeB, shapeA]
+
+        assertEquals(sprite.getChildAt(0), shapeC);
+        assertEquals(sprite.getChildAt(1), shapeB);
+        assertEquals(sprite.getChildAt(2), shapeA);
+      }
+
+      function testGetChildByName() {
+        
+        var sprite = new Sprite(),
+            shape = new Shape();
+
+        shape.name = 'Monkey';
+
+        sprite.addChild(shape);
+        
+        assertEquals(sprite.getChildByName('Monkey'), shape);
+        
+      }
+
+      function testInstanceOf() {
+        
+        var sprite = new Sprite(),
+        shape = new Shape();
+
+        assertTrue('Sprite instanceof Sprite? ', sprite instanceof Sprite);
+        assertTrue('Sprite instanceof DisplayObject? ', sprite instanceof DisplayObject);
+        assertTrue('Sprite instanceof EventDispatcher? ', sprite instanceof EventDispatcher);
+
+        assertFalse('Shape instanceof Sprite? ', shape instanceof Sprite);
+        assertTrue('Shape instanceof DisplayObject? ', shape instanceof DisplayObject);
+        assertTrue('Shape instanceof EventDispatcher? ', shape instanceof EventDispatcher);
+        
+      }
+
+      function testSettingTransformMatrix() {
+
+        var sprite = new Sprite();
+
+        //assertEquals(sprite.transform.matrix, new Matrix());
+        assertThrows(function() {
+          sprite.transform.matrix = null;
+        });
+        
+      }
+
+    </script>
+  </pre>
+</body>
+</html>

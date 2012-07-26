@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>as3.js Unit Tests - flash.errors.TypeError</title>
+  <script type="text/javascript" src="../../../../closure-library/closure/goog/base.js"></script>
+  <script src="../../../as3.deps.js"></script>
+  <script>
+    goog.require('flash.errors.TypeError');
+    goog.require('goog.testing.jsunit');
+  </script>
+</head>
+<body>
+<pre>
+<script>
+
+testAS3TypeError = function(){
+
+  var e = new TypeError('This should be a flash.errors.TypeError');
+  assertTrue(e instanceof flash.errors.TypeError);
+
+};
+
+testNormalTypeError = function() {
+
+  // Let's force a browser TypeError
+  try{
+   document.body.filters[0].apply();
+   assertTrue(false); // we should not get here, if we do it's an error.
+  }
+  catch(e){
+    assertFalse(e instanceof flash.errors.TypeError);
+  }
+
+};
+
+</script>
+</pre>
+</body>
+</html>
+

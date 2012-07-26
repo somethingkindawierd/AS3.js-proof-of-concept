@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>as3.js Unit Tests - flash.geom.Rectangle</title>
+  <script type="text/javascript" src="../../../../closure-library/closure/goog/base.js"></script>
+  <script src="../../../as3.deps.js"></script>
+  <script>
+    goog.require('flash.geom.Rectangle');
+    goog.require('goog.testing.jsunit');
+  </script> 
+</head>
+<body>
+<pre>
+<script>
+
+testDefaultValues = function(){
+  var rect = new Rectangle();
+  assertEquals(rect.x, 0);
+  assertEquals(rect.y, 0);
+  assertEquals(rect.width, 0);
+  assertEquals(rect.height, 0);
+  assertTrue(rect.topLeft.equals(new Point(0, 0)));
+  assertEquals(rect.top, 0);
+  assertEquals(rect.right, 0);
+  assertEquals(rect.bottom, 0);
+  assertEquals(rect.left, 0);
+  assertTrue(rect.bottomRight.equals(new Point(0, 0)));
+  assertTrue(rect.size.equals(new Point(0, 0)));
+};
+
+
+testToString = function(){
+  var rect = new Rectangle();
+  assertEquals( rect.toString(), "{x:0, y:0, width:0, height:0}");
+
+};
+
+testClone = function(){
+
+  var rect = new Rectangle();
+  var rectc = rect.clone();
+
+  assertEquals( rect.x, rectc.x);
+  assertEquals( rect.y, rectc.y);
+  assertTrue( rect.equals(rectc));
+
+};
+
+testSize = function(){
+
+  var rect = new Rectangle(3,4,10,20);
+  var pt = new Point(10,20);
+  
+  assertTrue( rect.size.equals(pt) );
+
+};
+
+</script>
+</pre>
+</body>
+</html>

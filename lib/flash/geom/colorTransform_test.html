@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>as3.js Unit Tests - flash.geom.ColorTransform</title>
+  <script type="text/javascript" src="../../../../closure-library/closure/goog/base.js"></script>
+  <script src="../../../as3.deps.js"></script>
+  <script>
+    goog.require('flash.geom.ColorTransform');
+    goog.require('goog.testing.jsunit');
+  </script> 
+</head>
+<body>
+<pre>
+<script>
+
+testLimitTesting = function(){
+
+  // Create color transfrom with out-of-bounds values
+  var c = new ColorTransform(10,10,-10,-10,256,256,-256,-256);
+
+  // Were they properly limited to max/min?
+  assertEquals(
+      c.toString(),
+      '(redMultiplier=1, greenMultiplier=1, ' +
+      'blueMultiplier=0, alphaMultiplier=0, ' +
+      'redOffset=255, greenOffset=255, ' +
+      'blueOffset=-255, alphaOffset=-255)');
+};
+
+
+testDefaultValues = function(){
+  var c = new ColorTransform();
+  assertEquals(
+      c.toString(),
+      '(redMultiplier=1, greenMultiplier=1, ' +
+      'blueMultiplier=1, alphaMultiplier=1, ' +
+      'redOffset=0, greenOffset=0, ' +
+      'blueOffset=0, alphaOffset=0)');
+};
+
+</script>
+</pre>
+</body>
+</html>

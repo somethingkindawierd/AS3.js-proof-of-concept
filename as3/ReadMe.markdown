@@ -13,7 +13,7 @@ It's very easy to test ActionScript3 code without owning Flash or Flex tools.
     *   [Linux Instructions](http://stevelove.org/2009/05/14/how-to-install-and-set-up-adobe-flex-sdk-on-ubuntu-linux/)
     *   TODO: OSX Flex SDK Instructions
     *   TODO: Windows Flex SDK Instructions?
-    
+
 Compiling the Examples
 ----------------------
 
@@ -25,7 +25,7 @@ Compiling the Examples
 2.  Run the following command in your terminal
 
         $ mxmlc -static-link-runtime-shared-libraries=true as3/looselyTyped/HelloWorld2.as
-        
+
 About the example code
 ======================
 

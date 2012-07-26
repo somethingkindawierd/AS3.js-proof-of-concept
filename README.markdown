@@ -77,26 +77,66 @@ Both are legal it AS3, so we make both available in this project.
 See the [Adobe Packages & namespaces Docs](http://bit.ly/adobe-as3-pkg-nmspace)
 for info on packaging/namespacing is ActionScript 3
 
-Google Closure
+Installation
 ============
 
-We use Google Closure to provide some basic functionality, such as classes and inheritenc, as well as to compile the project into its final form.
+You'll need both the google closure library and a clone of AS3.js from github.
 
-Compiling is demonstrated in the Point demo -- `test/flash/geom/point2.html`.
+In the end you'll have a directory structure looking something like this:
 
-change to the root of the AS3.js project, and run this command in your terminal:
+        AS3/
+            closure-library
+            compiler.jar
+            as3.js/
 
-    ./compile.sh
+1.  Make the AS3 dir and navigate to it in a terminal.
+Download the [Google Closure Library](http://code.google.com/closure/library/docs/gettingstarted.html). Here's the svn command that'll make the `closure-library` folder and check-out the library into it.
 
-you should see something like this echoed to the terminal:
+        svn checkout http://closure-library.googlecode.com/svn/trunk/ closure-library
 
-    closure-library/closure/bin/build/closurebuilder.py: Scanning paths...
-    closure-library/closure/bin/build/closurebuilder.py: 706 sources scanned.
-    closure-library/closure/bin/build/closurebuilder.py: Building dependency tree..
-    closure-library/closure/bin/build/closurebuilder.py: Compiling with the following command: java -jar compiler.jar --js closure-library/closure/goog/base.js --js lib/support/underscore.js --js lib/support/sugar.js --js lib/flash/flash.js --js lib/flash/geom/geom.js --js lib/flash/geom/Point.js
-    closure-library/closure/bin/build/closurebuilder.py: JavaScript compilation succeeded.
+2.  Download the [Google Closure Compiler](http://code.google.com/p/closure-compiler/), which can be found in a [.zip file here](http://closure-compiler.googlecode.com/files/compiler-latest.zip). Exctact `compiler.jar` into the `AS3` folder.
 
-At which point, if you look in the test/flash/geom/ folder you'll see a freshly compiled `point.compiled.js` file.
+3.  Clone your fork of the AS3 project from github
 
-To compare, load `test/flash/geom/point2.html` and you'll see a similar point demo loading all the files individually.
+        git clone git@github.com:yourUserName/AS3.js-proof-of-concept.git as3.js
+
+Compiling
+=========
+
+Dependencies
+------------
+
+Google Closure offers powerful compilation tools to merge and minify the library.
+
+First we need to create the dependencies file. This is done via the `as3.js/builddeps.sh`
+In your terminal navigate to the root of the project (the AS3 folder we made above) and run:
+
+    ./builddeps.sh
+
+This'll create the `as3.js/as3.deps.js` that closure needs to resolve dependencies dynamically.
+
+Compilation
+-----------
+
+The examples and tests within the library use the uncompiled code. However, when you want
+to finally export your project, you'll want to export a single, compiled version of the js code. To do this you'll use `closurebuilder.py`
+
+Compiling is demonstrated in the Point demo -- `as3.js/test/flash/geom/point2.html`.
+
+1.  Navigate your terminal to the `as3.js` folder and run this command in your terminal:
+
+        ./compile.sh
+
+2. You should see something like this echoed to the terminal:
+
+        ../closure-library/closure/bin/build/closurebuilder.py: Scanning paths...
+        ../closure-library/closure/bin/build/closurebuilder.py: 701 sources scanned.
+        ../closure-library/closure/bin/build/closurebuilder.py: Building dependency tree..
+        ../closure-library/closure/bin/build/closurebuilder.py: Compiling with the following command: java -jar ../compiler.jar --js *snipped for readability*
+        ../closure-library/closure/bin/build/closurebuilder.py: JavaScript compilation succeeded.
+
+
+At which point, if you look in the `as3.js/lib/flash/geom/` folder you'll see a freshly compiled `point.compiled.js` file.
+
+Now load up and compare both the development `point_test.html` (which dynamically loads all individual scripts needed) and production example `point_compiled_test.html` (which only loads one compiled js file).
 

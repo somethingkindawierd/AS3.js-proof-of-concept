@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang=en>
+  <head>
+    <meta charset=utf-8>
+    <title>Display Object Tests</title>
+
+    <script src="../../../../closure-library/closure/goog/base.js"></script>
+    <script src="../../../as3.deps.js"></script>
+    <script>
+      goog.require('flash.display.StageAlign');
+      goog.require('flash.display.StageDisplayState');
+      goog.require('flash.display.StageQuality');
+      goog.require('flash.display.StageScaleMode');
+      goog.require('flash.display.Stage');
+      goog.require('flash.display.Shape');
+      goog.require('flash.display.Sprite');
+
+      goog.require('goog.dom');
+      goog.require('goog.style');
+      
+      goog.require('goog.testing.jsunit');
+    </script>
+
+    <style>
+      #canvas_container {
+        float: left;
+        width: 100%;
+      }
+      #stageCanvas {
+        float:left;
+        margin:20px;
+        background-color:#777;
+      }
+    </style>
+    
+  </head>
+  <body>
+  <div id="canvas_container">
+    <canvas id="stageCanvas" ></canvas>
+  </div>
+  <pre>
+    <script>
+    
+    var stage = createStage();
+
+    function createStage() {
+      
+      var S = new Stage('stageCanvas');
+
+      S.width = 500;
+      S.height = 100;
+      S.align = StageAlign.TOP_LEFT;
+      S.displayState = StageDisplayState.NORMAL;
+      S.frameRate = 30;
+      S.quality = StageQuality.HIGH;
+      S.scaleMode = StageScaleMode.NO_SCALE;
+      S.showDefaultContextMenu = false;
+
+      var $ = goog.dom.getElement;
+      var el = $('stageCanvas');
+
+      // Is that stage the correct hight?
+      var size = goog.style.getSize(el);
+      assertEquals(500, size.width);
+      assertEquals(100, size.height);
+      
+      return S;
+    }
+
+    function testDrawLine() {
+      
+      var child = new Sprite();
+      stage.addChild(child);
+
+			/* You should see a squiggly yellow line *without* a fill */
+			child.graphics.beginFill('#000000', 0);
+      child.graphics.lineStyle(5, '#998800');
+      child.graphics.moveTo(55, 80);
+      child.graphics.lineTo(70, 70);
+      child.graphics.lineTo(100, 90);
+      child.graphics.lineTo(120, 60);
+      child.graphics.lineTo(150, 85);
+      child.graphics.lineTo(190, 70);
+      child.graphics.endFill();
+
+    }
+
+    function testDrawCircle() {
+      
+      var child = new Sprite();
+      stage.addChild(child);
+
+			/* You should see an opaque white circle */
+      child.graphics.beginFill('#ffffff');
+      child.graphics.drawCircle(25, 25, 20);
+
+			/* This will be a 50% transparent black circle overlapping
+			   the white circle */
+      child.graphics.beginFill('#000000', 0.5);
+      child.graphics.drawCircle(55, 25, 20);
+
+    }
+
+    function testDrawRect() {
+      
+      var child = new Sprite();
+      stage.addChild(child);
+
+      child.graphics.beginFill('#00cc99', 0.5);
+      child.graphics.drawRect(85, 5, 40, 20);
+      child.graphics.endFill();
+
+    }
+
+    function testDrawRect2() {
+      
+      var child = new Sprite();
+      stage.addChild(child);
+
+      child.graphics.beginFill(0xffffff, 0.5);
+      child.graphics.drawRect(105, 15, 40, 20);
+      child.graphics.endFill();
+      
+      child.graphics.beginFill(0x000099, 0.2);
+			child.graphics.lineStyle(2, 0x000000, 0.3);
+      child.graphics.drawRect(125, 25, 40, 20);
+      child.graphics.endFill();
+
+    }
+
+    </script>
+  </pre>
+</body>
+</html>

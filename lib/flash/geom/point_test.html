@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>as3.js Unit Tests - flash.geom.Point</title>
+  <script type="text/javascript" src="../../../../closure-library/closure/goog/base.js"></script>
+  <script src="../../../as3.deps.js"></script>
+  <script>
+    goog.require('flash.geom.Point');
+    goog.require('goog.testing.jsunit');
+  </script> 
+</head>
+<body>
+<pre>
+<script>
+
+testDefaultValues = function(){
+  var pt = new Point();
+  assertEquals(pt.x, 0);
+  assertEquals(pt.y, 0);
+};
+
+
+testToString = function(){
+  var pt = new Point();
+  assertEquals( pt.toString(), "{x:0, y:0, length:0}");
+
+};
+
+testClone = function(){
+
+  var pt = new Point();
+  var ptc = pt.clone();
+
+  assertEquals( pt.x, ptc.x);
+  assertEquals( pt.y, ptc.y);
+  assertTrue( pt.equals(ptc));
+
+};
+
+testLength = function(){
+
+  var pt = new Point(3,4);
+
+  console.log('pt.length = ', pt.length);
+  
+  assertEquals( pt.length, 5);
+
+};
+
+testDistance = function(){
+
+  var pt = new Point(3,4);
+
+  assertEquals( pt.distance(pt, new Point()), pt.length );
+
+};
+
+testAdd =function(){
+
+  var pt1 = new Point(3,4),
+      pt2 = new Point(3,4),
+      pt3 = null,
+      pt4 = new Point(6,8);
+
+  pt3 = pt1.add(pt2);
+
+  assertEquals( pt1.x + pt2.x, pt3.x);
+  assertEquals( pt1.y + pt2.y, pt3.y);
+  assertEquals( pt1.length + pt2.length, pt3.length);
+  assertTrue( pt3.equals(pt4) );
+
+};
+
+testOffset = function(){
+
+  var pt = new Point(10,10);
+  pt.offset(100,100);
+  assertEquals(pt.x, 110);
+  assertEquals(pt.y, 110);
+
+};
+
+testInterpolate = function(){
+
+  var pta = new Point(),
+      ptb = new Point(-10,-10),
+      ptc = null;
+
+  ptc = pta.interpolate(pta, ptb, 0.5);
+
+  assertEquals(ptc.x, -5);
+  assertEquals(ptc.y, -5);
+
+};
+
+testNormalizeOne = function(){
+
+  var pta = new Point(5,0),
+      ptb = null;
+
+  ptb = pta.normalize(1);
+
+  assertEquals(ptb.x, 1);
+  assertEquals(ptb.y, 0);
+
+};
+
+testNormalizeTwo = function(){
+
+  var pta = new Point(3,4),
+      ptb = null;
+
+  ptb = pta.normalize(2);
+
+  assertEquals(ptb.x, 1.2);
+  assertEquals(ptb.y, 1.6);
+
+};
+
+</script>
+</pre>
+</body>
+</html>
